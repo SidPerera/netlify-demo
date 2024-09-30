@@ -1,27 +1,15 @@
 "use client";
+import React from "react"; 
 import { useState, useEffect } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-// Interface for image data
-interface ImageData {
-  src: string;
-}
-
-// Image data array
-const images: ImageData[] = [
-  {
-    src: "https://images.cloudofgoods.com/items/52/20231129091250/item-3-1000w.webp",
-  },
-  {
-    src: "https://images.cloudofgoods.com/items/63/20240117095037/item-1-1000w.webp",
-  },
-  {
-    src: "https://images.cloudofgoods.com/items/112/20240515114343/item-1-1000w.webp",
-  },
-];
-
-export default function ImageSlider(): JSX.Element {
+// ImageSlider component
+export default function ImageSlider({
+  imageUrls,
+}: {
+  imageUrls: string[];
+}): JSX.Element {
   // State to keep track of the current image index
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
@@ -31,13 +19,13 @@ export default function ImageSlider(): JSX.Element {
   // Function to show the previous slide
   const prevSlide = (): void => {
     setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+      (prevIndex) => (prevIndex - 1 + imageUrls.length) % imageUrls.length
     );
   };
 
   // Function to show the next slide
   const nextSlide = (): void => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % imageUrls.length);
   };
 
   // useEffect hook to handle automatic slide transition
@@ -67,7 +55,9 @@ export default function ImageSlider(): JSX.Element {
 
   return (
     <>
-      <h1 className="font-sans text-center text-3xl font-semibold mt-10">Image Slider</h1>
+      <h1 className="font-sans text-center text-3xl font-semibold mt-10">
+        Image Slider
+      </h1>
       <div className="relative w-1/2 mx-auto mt-4">
         <div
           className="relative h-[460px] mx-12 group "
@@ -75,7 +65,7 @@ export default function ImageSlider(): JSX.Element {
           onMouseLeave={handleMouseLeave}
         >
           <Image
-            src={images[currentIndex].src}
+            src={imageUrls[currentIndex]}
             alt={`Slider Image ${currentIndex + 1}`}
             layout="fill"
             objectFit="cover"
@@ -94,18 +84,6 @@ export default function ImageSlider(): JSX.Element {
         >
           <ChevronRight className="text-gray-400 group-hover:text-white" />
         </button>
-        <div className="flex justify-center mt-4">
-          {images.map((_, index) => (
-            <div
-              key={index}
-              className={`h-1 w-10 mx-1 ${
-                index === currentIndex
-                  ? "bg-[#beff46] rounded-xl"
-                  : "bg-gray-300 rounded-xl"
-              } transition-all duration-500 ease-in-out`}
-            ></div>
-          ))}
-        </div>
       </div>
     </>
   );
